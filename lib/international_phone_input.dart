@@ -40,7 +40,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
   @override
   void initState() {
-    phoneTextController.addListener(_getPhoneText);
+    phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
 
     _fetchCountryData().then((list) {
@@ -66,7 +66,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     super.initState();
   }
 
-  _getPhoneText() {
+  _validatePhoneNumber() {
     String phoneText = phoneTextController.text;
     if (phoneText != null && phoneText.isNotEmpty) {
       parsePhoneNumber(phoneText, selectedItem.code).then((isValid) {
@@ -144,6 +144,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                   setState(() {
                     selectedItem = newValue;
                   });
+                  _validatePhoneNumber();
                 },
                 items: itemList.map<DropdownMenuItem<Country>>((Country value) {
                   return DropdownMenuItem<Country>(
