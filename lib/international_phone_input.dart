@@ -75,18 +75,23 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           errorText = error;
         });
 
-        if (isValid && widget.onPhoneNumberChange != null) {
-          getNormalizedPhoneNumber(phoneText, selectedItem.code).then((number) {
-            widget.onPhoneNumberChange(phoneText, number, selectedItem.code);
-          });
+        if (widget.onPhoneNumberChange != null) {
+          if (isValid) {
+            getNormalizedPhoneNumber(phoneText, selectedItem.code)
+                .then((number) {
+              widget.onPhoneNumberChange(phoneText, number, selectedItem.code);
+            });
+          } else {
+            widget.onPhoneNumberChange('', '', selectedItem.code);
+          }
         }
       });
     }
   }
 
   Future<List<Country>> _fetchCountryData() async {
-    var list =
-        await DefaultAssetBundle.of(context).loadString('raw/countries.json');
+    var list = await DefaultAssetBundle.of(context)
+        .loadString('packages/international_phone_input/countries.json');
     var jsonList = json.decode(list);
     List<Country> elements = [];
     jsonList.forEach((s) {
@@ -151,6 +156,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                           Image.asset(
                             value.flagUri,
                             width: 32.0,
+                            package: 'international_phone_input',
                           ),
                           SizedBox(width: 4),
                           Text(value.dialCode)
