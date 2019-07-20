@@ -1,8 +1,8 @@
 name: international_phone_input
 description: International Phone Number Input For Flutter
 version: 0.0.1
-author:
-homepage:
+author: Laud Bruce Tagoe <laud@inclusiveinnovations.co>
+homepage: https://github.com/niinyarko/flutter-international-phone-input
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
