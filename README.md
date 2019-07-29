@@ -36,4 +36,4 @@ void onPhoneNumberChange(String number, String internationalizedPhoneNumber, Str
 
 ## Contributions
 
-Contributions of any kind are more than welcome! Feel free to fork and improve country_code_picker in any way you want, make a pull request, or open an issue.
+Contributions of any kind are more than welcome! Feel free to fork and improve international_phone_input in any way you want, make a pull request, or open an issue.
