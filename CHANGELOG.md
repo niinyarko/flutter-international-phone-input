@@ -1,3 +1,7 @@
+## [1.0.1]
+
+* Add hint/error parameters for customization
+
 ## [1.0.0]
 
 * Bump version
