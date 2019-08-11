@@ -13,11 +13,18 @@ class InternationalPhoneInput extends StatefulWidget {
       String isoCode) onPhoneNumberChange;
   final String initialPhoneNumber;
   final String initialSelection;
+  final String errorText;
+  final String hintText;
+  final TextStyle errorStyle;
+  final TextStyle hintSyle;
+  final int errorMaxLines;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
-      this.initialPhoneNumber,
-      this.initialSelection});
+        this.initialPhoneNumber,
+        this.initialSelection,
+        this.errorText,
+        this.hintText,this.errorStyle, this.hintSyle, this.errorMaxLines});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return _InternationalPhoneInputState.getNormalizedPhoneNumber(number, iso);
@@ -33,6 +40,14 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   List<Country> itemList = [];
 
   String errorText;
+  String hintText;
+
+  TextStyle errorStyle;
+  TextStyle hintSyle;
+
+  int errorMaxLines;
+
+  bool hasError = false;
 
   _InternationalPhoneInputState();
 
@@ -40,6 +55,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
   @override
   void initState() {
+    errorText = widget.errorText ?? 'Please enter a valid phone number';
+    hintText = widget.hintText ?? 'eg. 244056345';
+    errorStyle = widget.errorStyle;
+    hintSyle = widget.hintSyle;
+    errorMaxLines = widget.errorMaxLines;
+
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
 
@@ -48,9 +69,9 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
       if (widget.initialSelection != null) {
         preSelectedItem = list.firstWhere(
-            (e) =>
-                (e.code.toUpperCase() ==
-                    widget.initialSelection.toUpperCase()) ||
+                (e) =>
+            (e.code.toUpperCase() ==
+                widget.initialSelection.toUpperCase()) ||
                 (e.dialCode == widget.initialSelection.toString()),
             orElse: () => list[0]);
       } else {
@@ -70,9 +91,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     String phoneText = phoneTextController.text;
     if (phoneText != null && phoneText.isNotEmpty) {
       parsePhoneNumber(phoneText, selectedItem.code).then((isValid) {
-        var error = isValid ? null : 'Please enter a valid phone number';
         setState(() {
-          errorText = error;
+          hasError = !isValid;
         });
 
         if (widget.onPhoneNumberChange != null) {
@@ -171,11 +191,16 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           ),
           Flexible(
               child: TextField(
-            keyboardType: TextInputType.phone,
-            controller: phoneTextController,
-            decoration: InputDecoration(
-                hintText: 'eg. 244056345', errorText: errorText),
-          ))
+                keyboardType: TextInputType.phone,
+                controller: phoneTextController,
+                decoration: InputDecoration(
+                    hintText: hintText,
+                    errorText: hasError ? errorText : null,
+                    hintStyle: hintSyle ?? null,
+                    errorStyle: errorStyle ?? null,
+                    errorMaxLines: errorMaxLines ?? 3,
+                ),
+              ))
         ],
       ),
     );
