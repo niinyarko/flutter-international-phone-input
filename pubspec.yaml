@@ -26,7 +26,7 @@ flutter:
     uses-material-design: true
 
     assets:
-        - packages/international_phone_input/assets/countries.json
+        - assets/countries.json
         - assets/flags/tg.png
         - assets/flags/me.png
         - assets/flags/la.png
