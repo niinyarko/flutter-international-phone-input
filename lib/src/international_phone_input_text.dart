@@ -22,6 +22,7 @@ class InternationalPhoneInputText extends StatefulWidget {
       this.errorMaxLines,
       this.onValidPhoneNumber})
       : super(key: key);
+
   @override
   _InternationalPhoneInputTextState createState() =>
       _InternationalPhoneInputTextState();
@@ -37,9 +38,9 @@ class _InternationalPhoneInputTextState
   // using didChangeDependencies to have access to context
   // putting if statement to avoid calling the function aver and over again
   @override
-  void didChangeDependencies() {
+  void initState() {
     print('change dep');
-    super.didChangeDependencies();
+    super.initState();
     if (countries == null) {
       print('fetching countries');
       PhoneService.fetchCountryData(context,
@@ -55,8 +56,6 @@ class _InternationalPhoneInputTextState
             controller = TextEditingController();
           });
           controller.addListener(() {
-            print('listen');
-            print('listener countries : $countries');
             if (isValid && controller.text.length > controlNumber.length) {
               setState(() {
                 controller.text = controlNumber;
@@ -84,31 +83,27 @@ class _InternationalPhoneInputTextState
     super.dispose();
   }
 
+//TO DO : test via Widget testing
   Future<String> _validatePhoneNumber(
       String number, List<Country> countries) async {
     String fullNumber;
     if (number != null && number.isNotEmpty) {
-      print('number not null');
       //This step to avoid calling async function on the whole list of countries
       List<Country> potentialCountries =
           PhoneService.getPotentialCountries(number, countries);
       if (potentialCountries != null) {
-        print('potential countries: $potentialCountries');
         for (var country in potentialCountries) {
           //isolate local number before parsing. Using length-1 to cut the '+'
           String localNumber = number.substring(country.dialCode.length - 1);
           isValid =
               await PhoneService.parsePhoneNumber(localNumber, country.code);
           if (isValid) {
-            print('found valid number');
             fullNumber = await PhoneService.getNormalizedPhoneNumber(
                 localNumber, country.code);
-            print('full number : $fullNumber');
             widget.onValidPhoneNumber(
                 number: localNumber,
                 internationalizedPhoneNumber: fullNumber,
                 isoCode: country.code);
-            print('callback called');
           }
         }
       }
@@ -118,7 +113,6 @@ class _InternationalPhoneInputTextState
 
   @override
   Widget build(BuildContext context) {
-    print('build');
     return Row(
       children: <Widget>[
         Padding(

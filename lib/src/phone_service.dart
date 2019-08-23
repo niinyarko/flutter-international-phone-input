@@ -6,11 +6,9 @@ import 'package:libphonenumber/libphonenumber.dart';
 import 'package:flutter/services.dart';
 
 class PhoneService {
-  //TO DO: add unit test
   static List<Country> getPotentialCountries(
       String number, List<Country> countries) {
     List<Country> result = [];
-    print('countries is null= $countries');
     if (number.length > 0 && number.length < 5) {
       List<String> potentialCodes =
           generatePotentialDialCodes(number, 0, number.length);
@@ -36,19 +34,16 @@ class PhoneService {
     return result;
   }
 
-  //TO DO: add unit test
   static List<String> generatePotentialDialCodes(
       String number, int index, int length) {
     List<String> digits = number.split('');
     List<String> potentialCodes = [];
     String aggregate = '+${digits[index]}';
     potentialCodes.add(aggregate);
-    print('aggregate: $aggregate');
     while (index < length - 1) {
       index += 1;
       aggregate = aggregate + digits[index];
       potentialCodes.add(aggregate);
-      print('aggregate: $aggregate');
     }
     return potentialCodes;
   }
@@ -65,23 +60,22 @@ class PhoneService {
 
   static Future<String> getNormalizedPhoneNumber(
       String number, String iso) async {
-    bool isValidPhoneNumber = await parsePhoneNumber(number, iso);
-
-    if (isValidPhoneNumber) {
+    try {
       String normalizedNumber = await PhoneNumberUtil.normalizePhoneNumber(
           phoneNumber: number, isoCode: iso);
 
       return normalizedNumber;
+    } catch (e) {
+      print(e);
+      return null;
     }
-
-    return null;
   }
 
   static Future<List<Country>> fetchCountryData(
       BuildContext context, String jsonFile) async {
     var list = await DefaultAssetBundle.of(context).loadString(jsonFile);
-    var jsonList = json.decode(list);
     List<Country> elements = [];
+    var jsonList = json.decode(list);
     jsonList.forEach((s) {
       Map elem = Map.from(s);
       elements.add(Country(
