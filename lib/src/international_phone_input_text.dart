@@ -30,51 +30,41 @@ class InternationalPhoneInputText extends StatefulWidget {
 
 class _InternationalPhoneInputTextState
     extends State<InternationalPhoneInputText> {
-  TextEditingController controller;
+  TextEditingController controller = TextEditingController();
   List<Country> countries;
   bool isValid = false;
   String controlNumber = '';
 
-  // using didChangeDependencies to have access to context
-  // putting if statement to avoid calling the function aver and over again
   @override
   void initState() {
-    print('change dep');
     super.initState();
-    if (countries == null) {
-      print('fetching countries');
-      PhoneService.fetchCountryData(context,
-              'packages/international_phone_input/assets/countries.json')
-          .then((list) {
-        print('countries: $list');
-        setState(() {
-          countries = list;
-          print(countries);
-        });
-        if (controller == null) {
+    PhoneService.fetchCountryData(
+            context, 'packages/international_phone_input/assets/countries.json')
+        .then((list) {
+      setState(() {
+        countries = list;
+      });
+    });
+  }
+
+  void onChanged() {
+    if (isValid && controller.text.length > controlNumber.length) {
+      setState(() {
+        controller.text = controlNumber;
+      });
+    }
+    if (countries != null) {
+      _validatePhoneNumber(controller.text, countries).then((fullNumber) {
+        if (fullNumber != null) {
           setState(() {
-            controller = TextEditingController();
-          });
-          controller.addListener(() {
-            if (isValid && controller.text.length > controlNumber.length) {
-              setState(() {
-                controller.text = controlNumber;
-              });
-            }
-            if (countries != null) {
-              _validatePhoneNumber(controller.text, countries)
-                  .then((fullNumber) {
-                if (fullNumber != null) {
-                  setState(() {
-                    controlNumber = fullNumber.substring(1);
-                  });
-                }
-              });
-            }
+            controlNumber = fullNumber.substring(1);
           });
         }
       });
     }
+    controller.selection =
+        TextSelection.collapsed(offset: controller.text.length);
+    return;
   }
 
   @override
@@ -83,9 +73,10 @@ class _InternationalPhoneInputTextState
     super.dispose();
   }
 
-//TO DO : test via Widget testing
+//TO DO : prevent onValidNumber from being called twice
   Future<String> _validatePhoneNumber(
       String number, List<Country> countries) async {
+    print('validation func launched');
     String fullNumber;
     if (number != null && number.isNotEmpty) {
       //This step to avoid calling async function on the whole list of countries
@@ -95,8 +86,12 @@ class _InternationalPhoneInputTextState
         for (var country in potentialCountries) {
           //isolate local number before parsing. Using length-1 to cut the '+'
           String localNumber = number.substring(country.dialCode.length - 1);
+          // TO DO: switch value back after validation
+          print('isValid launched: ${country.code}');
+
           isValid =
               await PhoneService.parsePhoneNumber(localNumber, country.code);
+          print('isValid value : $isValid');
           if (isValid) {
             fullNumber = await PhoneService.getNormalizedPhoneNumber(
                 localNumber, country.code);
@@ -126,8 +121,7 @@ class _InternationalPhoneInputTextState
             keyboardType: TextInputType.phone,
             controller: controller,
             onChanged: (content) {
-              controller.selection =
-                  TextSelection.collapsed(offset: controller.text.length);
+              onChanged();
             },
             decoration: InputDecoration(
               hintText: widget.hintText ?? "please enter a valid phone number",
