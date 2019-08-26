@@ -37,8 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   onValidPhoneNumber(
-      {String number, String internationalizedPhoneNumber, String isoCode}) {
-    print('called');
+      String number, String internationalizedPhoneNumber, String isoCode) {
     setState(() {
       visible = true;
       confirmedNumber = internationalizedPhoneNumber;
@@ -60,10 +59,13 @@ class _MyHomePageState extends State<MyHomePage> {
               initialPhoneNumber: phoneNumber,
               initialSelection: phoneIsoCode,
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 50),
             Container(
-              child: Text('no drop down list, type your number'),
+              width: double.infinity,
+              height: 1,
+              color: Colors.black,
             ),
+            SizedBox(height: 50),
             InternationalPhoneInputText(
               onValidPhoneNumber: onValidPhoneNumber,
             ),

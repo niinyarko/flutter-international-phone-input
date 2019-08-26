@@ -7,8 +7,6 @@ class InternationalPhoneInputText extends StatefulWidget {
           String number, String internationalizedPhoneNumber, String isoCode)
       onValidPhoneNumber;
   final String hintText;
-  final String errorText;
-  final TextStyle errorStyle;
   final TextStyle hintStyle;
   final int errorMaxLines;
   final String labelText;
@@ -16,8 +14,6 @@ class InternationalPhoneInputText extends StatefulWidget {
   const InternationalPhoneInputText(
       {Key key,
       this.hintText,
-      this.errorText,
-      this.errorStyle,
       this.hintStyle,
       this.errorMaxLines,
       this.onValidPhoneNumber,
@@ -35,6 +31,7 @@ class _InternationalPhoneInputTextState
   List<Country> countries;
   bool isValid = false;
   String controlNumber = '';
+  bool performValidation = true;
 
   @override
   void initState() {
@@ -49,12 +46,26 @@ class _InternationalPhoneInputTextState
   }
 
   void onChanged() {
+    // if user keeps inputting number, block the value to the last valid
+    // number input
     if (isValid && controller.text.length > controlNumber.length) {
       setState(() {
         controller.text = controlNumber;
       });
     }
-    if (countries != null) {
+
+    // block execution of validation of user keeps inputting numbers
+    if (controller.text == controlNumber) {
+      setState(() {
+        performValidation = false;
+      });
+    } else {
+      setState(() {
+        performValidation = true;
+      });
+    }
+
+    if (performValidation) {
       _validatePhoneNumber(controller.text, countries).then((fullNumber) {
         if (fullNumber != null) {
           setState(() {
@@ -63,6 +74,7 @@ class _InternationalPhoneInputTextState
         }
       });
     }
+    // place cursor at end of text string
     controller.selection =
         TextSelection.collapsed(offset: controller.text.length);
     return;
@@ -111,10 +123,7 @@ class _InternationalPhoneInputTextState
             },
             decoration: InputDecoration(
                 hintText: widget.hintText ?? null,
-                errorText:
-                    widget.errorText ?? 'Please enter a valid phone number',
                 hintStyle: widget.hintStyle ?? null,
-                errorStyle: widget.errorStyle ?? null,
                 errorMaxLines: widget.errorMaxLines ?? 3,
                 labelText: widget.labelText ?? 'Enter your phone number'),
           ),
