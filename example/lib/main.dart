@@ -27,7 +27,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool visible = false;
   String confirmedNumber = '';
 
-  //Does nothing in the example
   void onPhoneNumberChange(
       String number, String internationalizedPhoneNumber, String isoCode) {
     setState(() {
