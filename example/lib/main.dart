@@ -17,21 +17,29 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   String phoneNumber;
   String phoneIsoCode;
+  bool visible = false;
+  String confirmedNumber = '';
 
-
-  void onPhoneNumberChange(String number, String internationalizedPhoneNumber, String isoCode) {
+  void onPhoneNumberChange(
+      String number, String internationalizedPhoneNumber, String isoCode) {
     setState(() {
       phoneNumber = number;
       phoneIsoCode = isoCode;
+    });
+  }
+
+  onValidPhoneNumber(
+      String number, String internationalizedPhoneNumber, String isoCode) {
+    setState(() {
+      visible = true;
+      confirmedNumber = internationalizedPhoneNumber;
     });
   }
 
@@ -42,10 +50,30 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('International Phone Input Example'),
       ),
       body: Center(
-        child: InternationalPhoneInput(
-          onPhoneNumberChange: onPhoneNumberChange,
-          initialPhoneNumber: phoneNumber,
-          initialSelection: phoneIsoCode,
+        child: Column(
+          children: <Widget>[
+            Spacer(flex: 1),
+            InternationalPhoneInput(
+              onPhoneNumberChange: onPhoneNumberChange,
+              initialPhoneNumber: phoneNumber,
+              initialSelection: phoneIsoCode,
+            ),
+            SizedBox(height: 50),
+            Container(
+              width: double.infinity,
+              height: 1,
+              color: Colors.black,
+            ),
+            SizedBox(height: 50),
+            InternationalPhoneInputText(
+              onValidPhoneNumber: onValidPhoneNumber,
+            ),
+            Visibility(
+              child: Text(confirmedNumber),
+              visible: visible,
+            ),
+            Spacer(flex: 2)
+          ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
