@@ -24,11 +24,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
-  #international_phone_input: ^1.0.0
   international_phone_input:
     git:
-      url: git://github.com/quang-le/flutter-international-phone-input
-      ref: 4d542aef3276c31cbd82b1001fb462ce2fb1f02f
+      url: git://github.com/niinyarko/flutter-international-phone-input
 
 dev_dependencies:
   flutter_test:

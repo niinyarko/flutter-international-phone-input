@@ -127,11 +127,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4d542aef3276c31cbd82b1001fb462ce2fb1f02f"
-      resolved-ref: "4d542aef3276c31cbd82b1001fb462ce2fb1f02f"
-      url: "git://github.com/quang-le/flutter-international-phone-input"
+      ref: HEAD
+      resolved-ref: "17ecf519d5ef4ac7e2a8dfdec844360dd63fd53f"
+      url: "git://github.com/niinyarko/flutter-international-phone-input"
     source: git
-    version: "1.0.0"
+    version: "1.0.2"
   io:
     dependency: transitive
     description:
