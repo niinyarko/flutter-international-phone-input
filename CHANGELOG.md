@@ -1,3 +1,7 @@
+## [1.0.2]
+
+* Add widget with text input (no dropdown list) 
+
 ## [1.0.1]
 
 * Add hint/error parameters for customization
