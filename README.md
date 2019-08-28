@@ -21,6 +21,7 @@ void onPhoneNumberChange(String number, String internationalizedPhoneNumber, Str
     });
 }
 
+// Default Widget with dropdown list
 @override
  Widget build(BuildContext context) => Scaffold(
      body: Center(
@@ -31,6 +32,25 @@ void onPhoneNumberChange(String number, String internationalizedPhoneNumber, Str
        ),
      ),
  );
+
+// Widget with text input only
+
+ onValidPhoneNumber(
+      String number, String internationalizedPhoneNumber, String isoCode) {
+    setState(() {
+      confirmedNumber = internationalizedPhoneNumber;
+    });
+  }
+
+@override
+ Widget build(BuildContext context) => Scaffold(
+     body: Center(
+       child:  InternationalPhoneInputText(
+         onValidPhoneNumber: onValidPhoneNumber,
+        ),
+     ),
+ );
+
 
 ```
 
