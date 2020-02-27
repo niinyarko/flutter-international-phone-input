@@ -16,8 +16,10 @@ class InternationalPhoneInput extends StatefulWidget {
   final String initialSelection;
   final String errorText;
   final String hintText;
+  final String labelText;
   final TextStyle errorStyle;
   final TextStyle hintStyle;
+  final TextStyle labelStyle;
   final int errorMaxLines;
 
   InternationalPhoneInput(
@@ -26,8 +28,10 @@ class InternationalPhoneInput extends StatefulWidget {
       this.initialSelection,
       this.errorText,
       this.hintText,
+      this.labelText,
       this.errorStyle,
       this.hintStyle,
+      this.labelStyle,
       this.errorMaxLines});
 
   static Future<String> internationalizeNumber(String number, String iso) {
@@ -45,9 +49,11 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
   String errorText;
   String hintText;
+  String labelText;
 
   TextStyle errorStyle;
   TextStyle hintStyle;
+  TextStyle labelStyle;
 
   int errorMaxLines;
 
@@ -61,8 +67,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   void initState() {
     errorText = widget.errorText ?? 'Please enter a valid phone number';
     hintText = widget.hintText ?? 'eg. 244056345';
+    labelText = widget.labelText;
     errorStyle = widget.errorStyle;
     hintStyle = widget.hintStyle;
+    labelStyle = widget.labelStyle;
     errorMaxLines = widget.errorMaxLines;
 
     phoneTextController.addListener(_validatePhoneNumber);
@@ -176,9 +184,11 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             controller: phoneTextController,
             decoration: InputDecoration(
               hintText: hintText,
+              labelText: labelText,
               errorText: hasError ? errorText : null,
               hintStyle: hintStyle ?? null,
               errorStyle: errorStyle ?? null,
+              labelStyle: labelStyle,
               errorMaxLines: errorMaxLines ?? 3,
             ),
           ))
