@@ -129,7 +129,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         .loadString('packages/international_phone_input/assets/countries.json');
     List<dynamic> jsonList = json.decode(list);
 
-    List<Country> countries = List<Country>.generate(jsonList.length, (index){
+    List<Country> countries = List<Country>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
       if (widget.enabledCountries.isEmpty) {
         return Country(
@@ -137,7 +137,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             code: elem['alpha_2_code'],
             dialCode: elem['dial_code'],
             flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png');
-      } else if (widget.enabledCountries.contains(elem['alpha_2_code']) || widget.enabledCountries.contains(elem['dial_code'])) {
+      } else if (widget.enabledCountries.contains(elem['alpha_2_code']) ||
+          widget.enabledCountries.contains(elem['dial_code'])) {
         return Country(
             name: elem['en_short_name'],
             code: elem['alpha_2_code'],
