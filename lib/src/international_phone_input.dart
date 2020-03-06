@@ -47,7 +47,10 @@ class InternationalPhoneInput extends StatefulWidget {
 
 class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   Country selectedItem;
-  List<Country> itemList = [];
+  List<Country> countries = [];
+  bool isValid = false;
+  bool performValidation = true;
+  String controlNumber = '';
 
   String errorText;
   String hintText;
@@ -63,10 +66,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
   _InternationalPhoneInputState();
 
-  final phoneTextController = TextEditingController();
+  final controller = TextEditingController();
 
   @override
   void initState() {
+    super.initState();
+
     errorText = widget.errorText ?? 'Please enter a valid phone number';
     hintText = widget.hintText ?? 'eg. 244056345';
     labelText = widget.labelText;
@@ -75,8 +80,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     labelStyle = widget.labelStyle;
     errorMaxLines = widget.errorMaxLines;
 
-    phoneTextController.addListener(_validatePhoneNumber);
-    phoneTextController.text = widget.initialPhoneNumber;
+    controller.text = widget.initialPhoneNumber;
 
     _fetchCountryData().then((list) {
       Country preSelectedItem;
@@ -93,35 +97,70 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       }
 
       setState(() {
-        itemList = list;
+        countries = list;
         selectedItem = preSelectedItem;
       });
     });
-
-    super.initState();
   }
 
-  _validatePhoneNumber() {
-    String phoneText = phoneTextController.text;
-    if (phoneText != null && phoneText.isNotEmpty) {
-      PhoneService.parsePhoneNumber(phoneText, selectedItem.code)
-          .then((isValid) {
-        setState(() {
-          hasError = !isValid;
-        });
+  void onChanged() {
+    // if user keeps inputting number, block the value to the last valid
+    // number input
+    if (isValid && controller.text.length > controlNumber.length) {
+      setState(() {
+        controller.text = controlNumber;
+      });
+    }
 
-        if (widget.onPhoneNumberChange != null) {
-          if (isValid) {
-            PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem.code)
-                .then((number) {
-              widget.onPhoneNumberChange(phoneText, number, selectedItem.code);
-            });
-          } else {
-            widget.onPhoneNumberChange('', '', selectedItem.code);
-          }
+    // block execution of validation of user keeps inputting numbers
+    if (controller.text == controlNumber) {
+      setState(() {
+        performValidation = false;
+      });
+    } else {
+      setState(() {
+        performValidation = true;
+      });
+    }
+
+    if (performValidation) {
+      _validatePhoneNumber(controller.text, countries).then((fullNumber) {
+        if (fullNumber != null) {
+          setState(() {
+            controlNumber = fullNumber.substring(1);
+          });
         }
       });
     }
+    // place cursor at end of text string
+    controller.selection =
+        TextSelection.collapsed(offset: controller.text.length);
+    return;
+  }
+
+  Future<String> _validatePhoneNumber(
+      String number, List<Country> countries) async {
+    String fullNumber;
+    if (number != null && number.isNotEmpty) {
+      //This step to avoid calling async function on the whole list of countries
+      List<Country> potentialCountries =
+          PhoneService.getPotentialCountries(number, countries);
+
+      if (potentialCountries != null) {
+        for (var country in potentialCountries) {
+          //isolate local number before parsing. Using length-1 to cut the '+'
+          String localNumber = number.substring(country.dialCode.length - 1);
+          isValid =
+              await PhoneService.parsePhoneNumber(localNumber, country.code);
+          if (isValid) {
+            fullNumber = await PhoneService.getNormalizedPhoneNumber(
+                localNumber, country.code);
+            widget.onPhoneNumberChange(localNumber, fullNumber, country.code);
+          }
+        }
+      }
+    }
+    return fullNumber;
   }
 
   Future<List<Country>> _fetchCountryData() async {
@@ -129,7 +168,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         .loadString('packages/international_phone_input/assets/countries.json');
     List<dynamic> jsonList = json.decode(list);
 
-    List<Country> countries = List<Country>.generate(jsonList.length, (index){
+    List<Country> countries = List<Country>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
       if (widget.enabledCountries.isEmpty) {
         return Country(
@@ -137,7 +176,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             code: elem['alpha_2_code'],
             dialCode: elem['dial_code'],
             flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png');
-      } else if (widget.enabledCountries.contains(elem['alpha_2_code']) || widget.enabledCountries.contains(elem['dial_code'])) {
+      } else if (widget.enabledCountries.contains(elem['alpha_2_code']) ||
+          widget.enabledCountries.contains(elem['dial_code'])) {
         return Country(
             name: elem['en_short_name'],
             code: elem['alpha_2_code'],
@@ -168,9 +208,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                   setState(() {
                     selectedItem = newValue;
                   });
-                  _validatePhoneNumber();
+                  onChanged();
                 },
-                items: itemList.map<DropdownMenuItem<Country>>((Country value) {
+                items:
+                    countries.map<DropdownMenuItem<Country>>((Country value) {
                   return DropdownMenuItem<Country>(
                     value: value,
                     child: Container(
@@ -196,7 +237,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           Flexible(
               child: TextField(
             keyboardType: TextInputType.phone,
-            controller: phoneTextController,
+            controller: controller,
+            onChanged: (content) {
+              onChanged();
+            },
             decoration: InputDecoration(
               hintText: hintText,
               labelText: labelText,
