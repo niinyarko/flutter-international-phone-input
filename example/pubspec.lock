@@ -170,7 +170,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "31d7c7daffa6d71bff687f120a3a8e46489e409a"
+      resolved-ref: "2633364014096059a07d04b54e21d53cfc761b4d"
       url: "git://github.com/niinyarko/flutter-international-phone-input"
     source: git
     version: "1.0.3"
