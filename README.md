@@ -30,7 +30,8 @@ void onPhoneNumberChange(String number, String internationalizedPhoneNumber, Str
        child: InternationalPhoneInput(
           onPhoneNumberChange: onPhoneNumberChange, 
           initialPhoneNumber: phoneNumber,
-          initialSelection: phoneIsoCode
+          initialSelection: phoneIsoCode,
+          enabledCountries: ['+233', '+1']
        ),
      ),
  );

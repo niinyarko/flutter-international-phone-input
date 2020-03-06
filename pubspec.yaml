@@ -1,7 +1,6 @@
 name: international_phone_input
 description: International Phone Number Input For Flutter. This packages validates phone number input value using the libphonenumber package.
-version: 1.0.2
-author: Laud Bruce Tagoe <laud@inclusiveinnovations.co>
+version: 1.0.3
 homepage: https://github.com/niinyarko/flutter-international-phone-input
 
 environment:

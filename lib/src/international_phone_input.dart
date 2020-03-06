@@ -3,11 +3,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:international_phone_input/src/phone_service.dart';
 
 import 'country.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class InternationalPhoneInput extends StatefulWidget {
   final void Function(String phoneNumber, String internationalizedPhoneNumber,
@@ -21,6 +21,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final TextStyle hintStyle;
   final TextStyle labelStyle;
   final int errorMaxLines;
+  final List<String> enabledCountries;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -32,6 +33,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.errorStyle,
       this.hintStyle,
       this.labelStyle,
+      this.enabledCountries = const [],
       this.errorMaxLines});
 
   static Future<String> internationalizeNumber(String number, String iso) {
@@ -125,17 +127,30 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   Future<List<Country>> _fetchCountryData() async {
     var list = await DefaultAssetBundle.of(context)
         .loadString('packages/international_phone_input/assets/countries.json');
-    var jsonList = json.decode(list);
-    List<Country> elements = [];
-    jsonList.forEach((s) {
-      Map elem = Map.from(s);
-      elements.add(Country(
-          name: elem['en_short_name'],
-          code: elem['alpha_2_code'],
-          dialCode: elem['dial_code'],
-          flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png'));
+    List<dynamic> jsonList = json.decode(list);
+
+    List<Country> countries = List<Country>.generate(jsonList.length, (index){
+      Map<String, String> elem = Map<String, String>.from(jsonList[index]);
+      if (widget.enabledCountries.isEmpty) {
+        return Country(
+            name: elem['en_short_name'],
+            code: elem['alpha_2_code'],
+            dialCode: elem['dial_code'],
+            flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png');
+      } else if (widget.enabledCountries.contains(elem['alpha_2_code']) || widget.enabledCountries.contains(elem['dial_code'])) {
+        return Country(
+            name: elem['en_short_name'],
+            code: elem['alpha_2_code'],
+            dialCode: elem['dial_code'],
+            flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png');
+      } else {
+        return null;
+      }
     });
-    return elements;
+
+    countries.removeWhere((value) => value == null);
+
+    return countries;
   }
 
   @override

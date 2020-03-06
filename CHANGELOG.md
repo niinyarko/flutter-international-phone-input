@@ -1,3 +1,9 @@
+## [1.0.3]
+
+* Add optional labelText and labelStyle parameters
+
+* Only show enabled countries
+
 ## [1.0.2]
 
 * Add widget with text input (no dropdown list) 

@@ -29,6 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void onPhoneNumberChange(
       String number, String internationalizedPhoneNumber, String isoCode) {
+    print(number);
     setState(() {
       phoneNumber = number;
       phoneIsoCode = isoCode;
