@@ -22,6 +22,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final TextStyle labelStyle;
   final int errorMaxLines;
   final List<String> enabledCountries;
+  final InputBorder border;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -34,7 +35,8 @@ class InternationalPhoneInput extends StatefulWidget {
       this.hintStyle,
       this.labelStyle,
       this.enabledCountries = const [],
-      this.errorMaxLines});
+      this.errorMaxLines,
+      this.border});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -56,6 +58,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   TextStyle errorStyle;
   TextStyle hintStyle;
   TextStyle labelStyle;
+  InputBorder border;
 
   int errorMaxLines;
 
@@ -74,6 +77,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     hintStyle = widget.hintStyle;
     labelStyle = widget.labelStyle;
     errorMaxLines = widget.errorMaxLines;
+    border = widget.border;
 
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
@@ -206,6 +210,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               errorStyle: errorStyle ?? null,
               labelStyle: labelStyle,
               errorMaxLines: errorMaxLines ?? 3,
+              border: border ?? null
             ),
           ))
         ],
