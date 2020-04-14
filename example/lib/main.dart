@@ -61,7 +61,15 @@ class _MyHomePageState extends State<MyHomePage> {
               enabledCountries: ['+233', '+1'],
               labelText: "Phone Number",
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 20),
+            InternationalPhoneInput(
+              decoration: InputDecoration.collapsed(hintText: '(123) 123-1234'),
+              onPhoneNumberChange: onPhoneNumberChange,
+              initialPhoneNumber: phoneNumber,
+              initialSelection: phoneIsoCode,
+              enabledCountries: ['+233', '+1'],
+            ),
+            SizedBox(height: 20),
             Container(
               width: double.infinity,
               height: 1,
