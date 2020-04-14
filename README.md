@@ -54,6 +54,21 @@ void onPhoneNumberChange(String number, String internationalizedPhoneNumber, Str
      ),
  );
 
+// Widget with decoration
+// Using decoration overwrites other styles such as hintStyle, hintText, etc.
+
+@override
+ Widget build(BuildContext context) => Scaffold(
+     body: Center(
+       child: InternationalPhoneInput(
+          decoration: InputDecoration.collapsed(hintText: '(416) 123-4567'),
+          onPhoneNumberChange: onPhoneNumberChange, 
+          initialPhoneNumber: phoneNumber,
+          initialSelection: phoneIsoCode,
+          enabledCountries: ['+233', '+1']
+       ),
+     ),
+ );
 
 ```
 
