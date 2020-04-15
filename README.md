@@ -65,12 +65,34 @@ void onPhoneNumberChange(String number, String internationalizedPhoneNumber, Str
           onPhoneNumberChange: onPhoneNumberChange, 
           initialPhoneNumber: phoneNumber,
           initialSelection: phoneIsoCode,
-          enabledCountries: ['+233', '+1']
+          enabledCountries: ['+233', '+1'],
+          showCountryCodes: false
        ),
      ),
  );
 
 ```
+
+## Customization
+
+Here is a list of properties available to customize the widget:
+
+|        Name        	|       Type      	|                 Description                	|
+|:------------------:	|:---------------:	|:------------------------------------------:	|
+| initialPhoneNumber 	| String          	| used to set initial phone number           	|
+| initialSelection   	| String          	| used to set initial country code           	|
+| errorText          	| String          	| use this to set an error message           	|
+| hintText           	| String          	| sets hint                                  	|
+| labelText          	| String          	| sets label                                 	|
+| errorStyle         	| TextStyle       	| style applied to error message             	|
+| hintStyle          	| TextStyle       	| style applied to hint                      	|
+| labelStyle         	| TextStyle       	| style applied to label                     	|
+| errorMaxLines      	| int             	| the maximum number of lines user can type  	|
+| enabledCountries   	| List<String>    	| the list of enabled countries to display   	|
+| decoration         	| InputDecoration 	| decoration applied to the TextField widget 	|
+| showCountryCodes   	| bool            	| shows the country code (default true)      	|
+| showCountryFlags   	| bool            	| shows. the country flags (default true)    	|
+| dropdownIcon       	| Widget          	| use this to customize dropdown icon        	|
 
 ## Contributions
 
