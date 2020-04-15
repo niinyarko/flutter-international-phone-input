@@ -23,6 +23,9 @@ class InternationalPhoneInput extends StatefulWidget {
   final int errorMaxLines;
   final List<String> enabledCountries;
   final InputDecoration decoration;
+  final bool showCountryCodes;
+  final bool showCountryFlags;
+  final Widget icon;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -36,7 +39,10 @@ class InternationalPhoneInput extends StatefulWidget {
       this.labelStyle,
       this.enabledCountries = const [],
       this.errorMaxLines,
-      this.decoration});
+      this.decoration,
+      this.showCountryCodes = true,
+      this.showCountryFlags = true,
+      this.icon});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -62,8 +68,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   int errorMaxLines;
 
   bool hasError = false;
+  bool showCountryCodes;
+  bool showCountryFlags;
 
   InputDecoration decoration;
+
+  Widget icon;
 
   _InternationalPhoneInputState();
 
@@ -79,6 +89,9 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     labelStyle = widget.labelStyle;
     errorMaxLines = widget.errorMaxLines;
     decoration = widget.decoration;
+    showCountryCodes = widget.showCountryCodes;
+    showCountryFlags = widget.showCountryFlags;
+    icon = widget.icon;
 
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
@@ -170,6 +183,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               padding: EdgeInsets.only(top: 8),
               child: DropdownButton<Country>(
                 value: selectedItem,
+                icon: Padding(
+                  padding: EdgeInsets.only(bottom: (decoration != null) ? 6 : 0),
+                  child: icon ?? Icon(Icons.arrow_drop_down),
+                ),
                 onChanged: (Country newValue) {
                   setState(() {
                     selectedItem = newValue;
@@ -184,13 +201,17 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Image.asset(
-                            value.flagUri,
-                            width: 32.0,
-                            package: 'international_phone_input',
-                          ),
-                          SizedBox(width: 4),
-                          Text(value.dialCode)
+                          if (showCountryFlags) ...[
+                            Image.asset(
+                              value.flagUri,
+                              width: 32.0,
+                              package: 'international_phone_input',
+                            )
+                          ],
+                          if (showCountryCodes) ...[
+                            SizedBox(width: 4),
+                            Text(value.dialCode)
+                          ]
                         ],
                       ),
                     ),
