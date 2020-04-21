@@ -28,13 +28,11 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool isDense;
   final InputBorder border;
   final InputBorder focusedBorder;
-  String initialInternationalPhoneNumber;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
       this.initialPhoneNumber,
       this.initialSelection,
-      this.initialInternationalPhoneNumber,
       this.errorText,
       this.hintText,
       this.labelText,
@@ -67,7 +65,6 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   String errorText;
   String hintText;
   String labelText;
-  String initialInternationalPhoneNumber;
 
   TextStyle errorStyle;
   TextStyle hintStyle;
@@ -97,20 +94,14 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     errorStyle = widget.errorStyle;
     hintStyle = widget.hintStyle;
     labelStyle = widget.labelStyle;
+    textStyle = widget.textStyle;
     errorMaxLines = widget.errorMaxLines;
     contentPadding = widget.contentPadding;
     isDense = widget.isDense;
     border = widget.border;
-    focusedBorder = widget.focusedBorder;
-    initialInternationalPhoneNumber = widget.initialInternationalPhoneNumber;
 
     phoneTextController.addListener(_validatePhoneNumber);
-    if (initialInternationalPhoneNumber.isEmpty) {
-      phoneTextController.text = widget.initialPhoneNumber;
-    } else {
-      _validatePhoneNumber(phoneText: initialInternationalPhoneNumber);
-    }
-
+    phoneTextController.text = widget.initialPhoneNumber;
 
     _fetchCountryData().then((list) {
       Country preSelectedItem;
@@ -135,8 +126,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     super.initState();
   }
 
-  _validatePhoneNumber({String phoneText = ""}) {
-    phoneText = phoneText.isEmpty ? phoneTextController.text : phoneText;
+  _validatePhoneNumber() {
+    String phoneText = phoneTextController.text;
     if (phoneText != null && phoneText.isNotEmpty) {
       PhoneService.parsePhoneNumber(phoneText, selectedItem.code)
           .then((isValid) {
