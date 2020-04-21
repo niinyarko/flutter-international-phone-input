@@ -28,6 +28,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool isDense;
   final InputBorder border;
   final InputBorder focusedBorder;
+  final TextEditingController phoneTextController;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -47,6 +48,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.isDense,
       this.border,
       this.focusedBorder,
+      this.phoneTextController,
       });
 
   static Future<String> internationalizeNumber(String number, String iso) {
@@ -84,7 +86,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
   _InternationalPhoneInputState();
 
-  final phoneTextController = TextEditingController();
+  TextEditingController phoneTextController;
 
   @override
   void initState() {
@@ -101,7 +103,6 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     border = widget.border;
 
     phoneTextController.addListener(_validatePhoneNumber);
-    phoneTextController.text = widget.initialPhoneNumber;
 
     _fetchCountryData().then((list) {
       Country preSelectedItem;
