@@ -20,9 +20,14 @@ class InternationalPhoneInput extends StatefulWidget {
   final TextStyle errorStyle;
   final TextStyle hintStyle;
   final TextStyle labelStyle;
+  final TextStyle textStyle;
   final int errorMaxLines;
   final List<String> enabledCountries;
   final InputDecoration decoration;
+  final EdgeInsets contentPadding;
+  final bool isDense;
+  final InputBorder border;
+  final InputBorder focusedBorder;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -36,7 +41,13 @@ class InternationalPhoneInput extends StatefulWidget {
       this.labelStyle,
       this.enabledCountries = const [],
       this.errorMaxLines,
-      this.decoration});
+      this.decoration,
+      this.textStyle,
+      this.contentPadding,
+      this.isDense,
+      this.border,
+      this.focusedBorder,
+      });
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -58,6 +69,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   TextStyle errorStyle;
   TextStyle hintStyle;
   TextStyle labelStyle;
+  TextStyle textStyle;
+
+  EdgeInsets contentPadding;
+  bool isDense;
+  InputBorder border;
+  InputBorder focusedBorder;
 
   int errorMaxLines;
 
@@ -78,7 +95,6 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     hintStyle = widget.hintStyle;
     labelStyle = widget.labelStyle;
     errorMaxLines = widget.errorMaxLines;
-    decoration = widget.decoration;
 
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
@@ -203,7 +219,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               child: TextField(
             keyboardType: TextInputType.phone,
             controller: phoneTextController,
-            decoration: decoration ?? InputDecoration(
+            style: textStyle,
+            decoration: InputDecoration(
+              contentPadding: contentPadding,
+              isDense: isDense ?? false,
+              border: border,
+              focusedBorder: focusedBorder,
               hintText: hintText,
               labelText: labelText,
               errorText: hasError ? errorText : null,
