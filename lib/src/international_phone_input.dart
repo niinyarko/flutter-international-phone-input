@@ -95,6 +95,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     hintStyle = widget.hintStyle;
     labelStyle = widget.labelStyle;
     errorMaxLines = widget.errorMaxLines;
+    contentPadding = widget.contentPadding;
+    isDense = widget.isDense;
+    border = widget.border;
+    focusedBorder = widget.focusedBorder;
 
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
