@@ -12,6 +12,7 @@ International Phone Number Input For Flutter
 Just put the component in your application.
 
 ```dart
+import 'package:international_phone_input/international_phone_input.dart';
 
 String phoneNumber;
 String phoneIsoCode;
