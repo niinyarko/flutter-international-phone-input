@@ -68,6 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
               initialPhoneNumber: phoneNumber,
               initialSelection: phoneIsoCode,
               enabledCountries: ['+233', '+1'],
+              showCountryCodes: false,
+              showCountryFlags: true,
             ),
             SizedBox(height: 20),
             Container(
