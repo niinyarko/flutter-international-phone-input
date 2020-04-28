@@ -1,3 +1,9 @@
+## [1.0.4]
+
+* Add optional decoration object
+
+* Add optional border parameter to be set as InputBorder on the decoration object
+
 ## [1.0.3]
 
 * Add optional labelText and labelStyle parameters

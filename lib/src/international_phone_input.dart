@@ -26,6 +26,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool showCountryCodes;
   final bool showCountryFlags;
   final Widget dropdownIcon;
+  final InputBorder border;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -42,7 +43,8 @@ class InternationalPhoneInput extends StatefulWidget {
       this.decoration,
       this.showCountryCodes = true,
       this.showCountryFlags = true,
-      this.dropdownIcon});
+      this.dropdownIcon,
+      this.border});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -72,8 +74,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   bool showCountryFlags;
 
   InputDecoration decoration;
-
   Widget dropdownIcon;
+  InputBorder border;
 
   _InternationalPhoneInputState();
 
@@ -184,7 +186,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               child: DropdownButton<Country>(
                 value: selectedItem,
                 icon: Padding(
-                  padding: EdgeInsets.only(bottom: (decoration != null) ? 6 : 0),
+                  padding:
+                      EdgeInsets.only(bottom: (decoration != null) ? 6 : 0),
                   child: dropdownIcon ?? Icon(Icons.arrow_drop_down),
                 ),
                 onChanged: (Country newValue) {
@@ -224,15 +227,17 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
               child: TextField(
             keyboardType: TextInputType.phone,
             controller: phoneTextController,
-            decoration: decoration ?? InputDecoration(
-              hintText: hintText,
-              labelText: labelText,
-              errorText: hasError ? errorText : null,
-              hintStyle: hintStyle ?? null,
-              errorStyle: errorStyle ?? null,
-              labelStyle: labelStyle,
-              errorMaxLines: errorMaxLines ?? 3,
-            ),
+            decoration: decoration ??
+                InputDecoration(
+                  hintText: hintText,
+                  labelText: labelText,
+                  errorText: hasError ? errorText : null,
+                  hintStyle: hintStyle ?? null,
+                  errorStyle: errorStyle ?? null,
+                  labelStyle: labelStyle,
+                  errorMaxLines: errorMaxLines ?? 3,
+                  border: border ?? null,
+                ),
           ))
         ],
       ),
