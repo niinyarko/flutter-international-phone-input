@@ -11,7 +11,7 @@ import 'country.dart';
 
 class InternationalPhoneInput extends StatefulWidget {
   final void Function(String phoneNumber, String internationalizedPhoneNumber,
-      String isoCode) onPhoneNumberChange;
+      String isoCode, String dialCode) onPhoneNumberChange;
   final String initialPhoneNumber;
   final String initialSelection;
   final String errorText;
@@ -134,10 +134,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           if (isValid) {
             PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem.code)
                 .then((number) {
-              widget.onPhoneNumberChange(phoneText, number, selectedItem.code);
+              widget.onPhoneNumberChange(phoneText, number, selectedItem.code, selectedItem.dialCode);
             });
           } else {
-            widget.onPhoneNumberChange('', '', selectedItem.code);
+            widget.onPhoneNumberChange('', '', selectedItem.code, selectedItem.dialCode);
           }
         }
       });
