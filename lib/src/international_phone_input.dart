@@ -214,7 +214,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                             )
                           ],
                           if (showCountryCodes) ...[
-                            SizedBox(width: 4),
+                            SizedBox(width: 9),
                             Text(value.dialCode, style: countryCodeStyle,)
                           ]
                         ],
