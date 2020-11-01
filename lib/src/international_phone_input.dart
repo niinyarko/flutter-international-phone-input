@@ -27,6 +27,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool showCountryFlags;
   final Widget dropdownIcon;
   final InputBorder border;
+  final TextStyle countryCodeStyle;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -44,7 +45,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.showCountryCodes = true,
       this.showCountryFlags = true,
       this.dropdownIcon,
-      this.border});
+      this.border, this.countryCodeStyle});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
