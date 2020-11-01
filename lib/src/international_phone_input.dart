@@ -95,7 +95,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     showCountryCodes = widget.showCountryCodes;
     showCountryFlags = widget.showCountryFlags;
     dropdownIcon = widget.dropdownIcon;
-
+    countryCodeStyle = widget.countryCodeStyle;
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
 
