@@ -66,7 +66,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   TextStyle errorStyle;
   TextStyle hintStyle;
   TextStyle labelStyle;
-
+  TextStyle countryCodeStyle;
   int errorMaxLines;
 
   bool hasError = false;
@@ -213,7 +213,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                           ],
                           if (showCountryCodes) ...[
                             SizedBox(width: 4),
-                            Text(value.dialCode)
+                            Text(value.dialCode, style: countryCodeStyle,)
                           ]
                         ],
                       ),

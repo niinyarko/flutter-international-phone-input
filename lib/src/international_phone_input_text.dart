@@ -76,7 +76,7 @@ class _InternationalPhoneInputTextState
     }
     // place cursor at end of text string
     controller.selection =
-        TextSelection.collapsed(offset: controller.text.length);
+        TextSelection.collapsed(int: controller.text.length);
     return;
   }
 
