@@ -20,6 +20,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final TextStyle errorStyle;
   final TextStyle hintStyle;
   final TextStyle labelStyle;
+  final TextStyle style;
   final int errorMaxLines;
   final List<String> enabledCountries;
   final InputDecoration decoration;
@@ -39,6 +40,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.errorStyle,
       this.hintStyle,
       this.labelStyle,
+      this.style,
       this.enabledCountries = const [],
       this.errorMaxLines,
       this.decoration,
@@ -70,7 +72,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   TextStyle labelStyle;
   TextStyle countryCodeStyle;
   int errorMaxLines;
-
+  TextStyle style;
   bool hasError = false;
   bool showCountryCodes;
   bool showCountryFlags;
@@ -91,6 +93,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     errorStyle = widget.errorStyle;
     hintStyle = widget.hintStyle;
     labelStyle = widget.labelStyle;
+    style = widget.style;
     errorMaxLines = widget.errorMaxLines;
     decoration = widget.decoration;
     showCountryCodes = widget.showCountryCodes;
@@ -227,6 +230,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           ),
           Flexible(
               child: TextField(
+                style: style,
             keyboardType: TextInputType.phone,
             controller: phoneTextController,
             decoration: decoration ??
