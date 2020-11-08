@@ -29,6 +29,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final Widget dropdownIcon;
   final InputBorder border;
   final TextStyle countryCodeStyle;
+  final EdgeInsets scrollPadding;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -48,7 +49,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.showCountryFlags = true,
       this.dropdownIcon,
       this.border,
-      this.countryCodeStyle});
+      this.countryCodeStyle, this.scrollPadding});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -80,6 +81,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   InputDecoration decoration;
   Widget dropdownIcon;
   InputBorder border;
+  EdgeInsets scrollPadding;
 
   _InternationalPhoneInputState();
 
@@ -102,7 +104,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     countryCodeStyle = widget.countryCodeStyle;
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
-
+    scrollPadding = widget.scrollPadding;
     _fetchCountryData().then((list) {
       Country preSelectedItem;
 
@@ -231,6 +233,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           Flexible(
               child: TextField(
                 style: style,
+                scrollPadding: scrollPadding,
             keyboardType: TextInputType.phone,
             controller: phoneTextController,
             decoration: decoration ??
