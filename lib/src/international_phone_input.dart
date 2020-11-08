@@ -20,6 +20,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final TextStyle errorStyle;
   final TextStyle hintStyle;
   final TextStyle labelStyle;
+  final TextStyle style;
   final int errorMaxLines;
   final List<String> enabledCountries;
   final InputDecoration decoration;
@@ -27,6 +28,8 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool showCountryFlags;
   final Widget dropdownIcon;
   final InputBorder border;
+  final TextStyle countryCodeStyle;
+  final EdgeInsets scrollPadding;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -38,13 +41,15 @@ class InternationalPhoneInput extends StatefulWidget {
       this.errorStyle,
       this.hintStyle,
       this.labelStyle,
+      this.style,
       this.enabledCountries = const [],
       this.errorMaxLines,
       this.decoration,
       this.showCountryCodes = true,
       this.showCountryFlags = true,
       this.dropdownIcon,
-      this.border});
+      this.border,
+      this.countryCodeStyle, this.scrollPadding});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -66,9 +71,9 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   TextStyle errorStyle;
   TextStyle hintStyle;
   TextStyle labelStyle;
-
+  TextStyle countryCodeStyle;
   int errorMaxLines;
-
+  TextStyle style;
   bool hasError = false;
   bool showCountryCodes;
   bool showCountryFlags;
@@ -76,6 +81,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   InputDecoration decoration;
   Widget dropdownIcon;
   InputBorder border;
+  EdgeInsets scrollPadding;
 
   _InternationalPhoneInputState();
 
@@ -89,15 +95,16 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     errorStyle = widget.errorStyle;
     hintStyle = widget.hintStyle;
     labelStyle = widget.labelStyle;
+    style = widget.style;
     errorMaxLines = widget.errorMaxLines;
     decoration = widget.decoration;
     showCountryCodes = widget.showCountryCodes;
     showCountryFlags = widget.showCountryFlags;
     dropdownIcon = widget.dropdownIcon;
-
+    countryCodeStyle = widget.countryCodeStyle;
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
-
+    scrollPadding = widget.scrollPadding;
     _fetchCountryData().then((list) {
       Country preSelectedItem;
 
@@ -212,8 +219,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                             )
                           ],
                           if (showCountryCodes) ...[
-                            SizedBox(width: 4),
-                            Text(value.dialCode)
+                            SizedBox(width: 9),
+                            Text(value.dialCode, style: countryCodeStyle,)
                           ]
                         ],
                       ),
@@ -225,6 +232,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           ),
           Flexible(
               child: TextField(
+                style: style,
+                scrollPadding: scrollPadding,
             keyboardType: TextInputType.phone,
             controller: phoneTextController,
             decoration: decoration ??
