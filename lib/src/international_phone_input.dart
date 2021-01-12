@@ -25,6 +25,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final InputDecoration decoration;
   final bool showCountryCodes;
   final bool showCountryFlags;
+  final bool orderByIso;
   final Widget dropdownIcon;
   final InputBorder border;
 
@@ -44,7 +45,8 @@ class InternationalPhoneInput extends StatefulWidget {
       this.showCountryCodes = true,
       this.showCountryFlags = true,
       this.dropdownIcon,
-      this.border});
+      this.border,
+      this.orderByIso = false});
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -72,6 +74,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   bool hasError = false;
   bool showCountryCodes;
   bool showCountryFlags;
+  bool orderByIso;
 
   InputDecoration decoration;
   Widget dropdownIcon;
@@ -94,7 +97,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     showCountryCodes = widget.showCountryCodes;
     showCountryFlags = widget.showCountryFlags;
     dropdownIcon = widget.dropdownIcon;
-
+    orderByIso = widget.orderByIso;
     phoneTextController.addListener(_validatePhoneNumber);
     phoneTextController.text = widget.initialPhoneNumber;
 
@@ -134,10 +137,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           if (isValid) {
             PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem.code)
                 .then((number) {
-              widget.onPhoneNumberChange(phoneText, number, selectedItem.code, selectedItem.dialCode);
+              widget.onPhoneNumberChange(
+                  phoneText, number, selectedItem.code, selectedItem.dialCode);
             });
           } else {
-            widget.onPhoneNumberChange('', '', selectedItem.code, selectedItem.dialCode);
+            widget.onPhoneNumberChange(
+                '', '', selectedItem.code, selectedItem.dialCode);
           }
         }
       });
@@ -148,7 +153,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     var list = await DefaultAssetBundle.of(context)
         .loadString('packages/international_phone_input/assets/countries.json');
     List<dynamic> jsonList = json.decode(list);
-
+    orderByIso
+        ? jsonList.sort((a, b) => int.parse(a["dial_code"].replaceAll("+", ""))
+            .compareTo(int.parse(b["dial_code"].replaceAll("+", ""))))
+        : null;
     List<Country> countries = List<Country>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
       if (widget.enabledCountries.isEmpty) {
