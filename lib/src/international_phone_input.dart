@@ -27,24 +27,27 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool showCountryFlags;
   final Widget dropdownIcon;
   final InputBorder border;
+  final FocusNode focusNode;
 
-  InternationalPhoneInput(
-      {this.onPhoneNumberChange,
-      this.initialPhoneNumber,
-      this.initialSelection,
-      this.errorText,
-      this.hintText,
-      this.labelText,
-      this.errorStyle,
-      this.hintStyle,
-      this.labelStyle,
-      this.enabledCountries = const [],
-      this.errorMaxLines,
-      this.decoration,
-      this.showCountryCodes = true,
-      this.showCountryFlags = true,
-      this.dropdownIcon,
-      this.border});
+  const InternationalPhoneInput({
+    this.onPhoneNumberChange,
+    this.initialPhoneNumber,
+    this.initialSelection,
+    this.errorText,
+    this.hintText,
+    this.labelText,
+    this.errorStyle,
+    this.hintStyle,
+    this.labelStyle,
+    this.enabledCountries = const [],
+    this.errorMaxLines,
+    this.decoration,
+    this.showCountryCodes = true,
+    this.showCountryFlags = true,
+    this.dropdownIcon,
+    this.border,
+    this.focusNode,
+  });
 
   static Future<String> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
@@ -134,10 +137,12 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           if (isValid) {
             PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem.code)
                 .then((number) {
-              widget.onPhoneNumberChange(phoneText, number, selectedItem.code, selectedItem.dialCode);
+              widget.onPhoneNumberChange(
+                  phoneText, number, selectedItem.code, selectedItem.dialCode);
             });
           } else {
-            widget.onPhoneNumberChange('', '', selectedItem.code, selectedItem.dialCode);
+            widget.onPhoneNumberChange(
+                '', '', selectedItem.code, selectedItem.dialCode);
           }
         }
       });
@@ -225,6 +230,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
           ),
           Flexible(
               child: TextField(
+            focusNode: widget?.focusNode,
             keyboardType: TextInputType.phone,
             controller: phoneTextController,
             decoration: decoration ??
