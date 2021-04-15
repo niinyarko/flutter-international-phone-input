@@ -22,13 +22,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String phoneNumber;
-  String phoneIsoCode;
+  String phoneNumber = '68699698';
+  String? phoneIsoCode = '';
   bool visible = false;
-  String confirmedNumber = '';
+  String? confirmedNumber = '';
 
-  void onPhoneNumberChange(
-      String number, String internationalizedPhoneNumber, String isoCode) {
+  void onPhoneNumberChange(String number, String? internationalizedPhoneNumber,
+      String? isoCode, String? dialCode) {
     print(number);
     setState(() {
       phoneNumber = number;
@@ -37,7 +37,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   onValidPhoneNumber(
-      String number, String internationalizedPhoneNumber, String isoCode) {
+    String number,
+    String? internationalizedPhoneNumber,
+    String? isoCode,
+  ) {
     setState(() {
       visible = true;
       confirmedNumber = internationalizedPhoneNumber;
@@ -58,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPhoneNumberChange: onPhoneNumberChange,
               initialPhoneNumber: phoneNumber,
               initialSelection: phoneIsoCode,
-              enabledCountries: ['+233', '+1'],
+              enabledCountries: ['+373'],
               labelText: "Phone Number",
             ),
             SizedBox(height: 20),
@@ -67,8 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
               onPhoneNumberChange: onPhoneNumberChange,
               initialPhoneNumber: phoneNumber,
               initialSelection: phoneIsoCode,
-              enabledCountries: ['+233', '+1'],
-              showCountryCodes: false,
+              enabledCountries: ['+373'],
+              showCountryCodes: true,
               showCountryFlags: true,
             ),
             SizedBox(height: 20),
@@ -82,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onValidPhoneNumber: onValidPhoneNumber,
             ),
             Visibility(
-              child: Text(confirmedNumber),
+              child: Text('$confirmedNumber'),
               visible: visible,
             ),
             Spacer(flex: 2)
