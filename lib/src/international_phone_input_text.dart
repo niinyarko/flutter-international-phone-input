@@ -28,7 +28,7 @@ class InternationalPhoneInputText extends StatefulWidget {
 class _InternationalPhoneInputTextState
     extends State<InternationalPhoneInputText> {
   TextEditingController controller = TextEditingController();
-  List<Country>? countries;
+  late List<Country> countries;
   bool? isValid = false;
   String controlNumber = '';
   bool performValidation = true;
@@ -81,13 +81,13 @@ class _InternationalPhoneInputTextState
   }
 
   Future<String?> _validatePhoneNumber(
-      String number, List<Country>? countries) async {
+      String number, List<Country> countries) async {
     String? fullNumber;
-    if (number != null && number.isNotEmpty) {
+    if (number.isNotEmpty) {
       //This step to avoid calling async function on the whole list of countries
       List<Country> potentialCountries =
           PhoneService.getPotentialCountries(number, countries);
-      if (potentialCountries != null) {
+      /* if (potentialCountries != null) { */
         for (var country in potentialCountries) {
           //isolate local number before parsing. Using length-1 to cut the '+'
           String localNumber = number.substring(country.dialCode!.length - 1);
@@ -99,7 +99,7 @@ class _InternationalPhoneInputTextState
             widget.onValidPhoneNumber!(localNumber, fullNumber, country.code);
           }
         }
-      }
+    /*   } */
     }
     return fullNumber;
   }

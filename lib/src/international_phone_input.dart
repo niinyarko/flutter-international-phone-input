@@ -23,7 +23,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final TextStyle? hintStyle;
   final TextStyle? labelStyle;
   final int? errorMaxLines;
-  final List<String> enabledCountries;
+  final Map<String, String> enabledCountries;
   final InputDecoration? decoration;
   final bool showCountryCodes;
   final bool showCountryFlags;
@@ -40,7 +40,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.errorStyle,
       this.hintStyle,
       this.labelStyle,
-      this.enabledCountries = const [],
+      this.enabledCountries = const {},
       this.errorMaxLines,
       this.decoration,
       this.showCountryCodes = true,
@@ -82,6 +82,8 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   _InternationalPhoneInputState();
 
   final phoneTextController = TextEditingController();
+
+  final defaultErrorStyle = TextStyle(color: Colors.red);
 
   @override
   void initState() {
@@ -163,8 +165,9 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             code: elem['alpha_2_code'],
             dialCode: elem['dial_code'],
             flagUri: 'assets/flags/${elem['alpha_2_code']!.toLowerCase()}.png');
-      } else if (widget.enabledCountries.contains(elem['alpha_2_code']) ||
-          widget.enabledCountries.contains(elem['dial_code'])) {
+      } else if (widget.enabledCountries.values
+              .contains(elem['alpha_2_code']) &&
+          widget.enabledCountries.keys.contains(elem['dial_code'])) {
         return Country(
             name: elem['en_short_name'],
             code: elem['alpha_2_code'],
@@ -231,7 +234,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
             ),
           ),
           Flexible(
-              child: TextField(
+              child: TextFormField(
             keyboardType: TextInputType.phone,
             controller: phoneTextController,
             decoration: decoration ??
@@ -240,7 +243,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                   labelText: labelText,
                   errorText: hasError ? errorText : null,
                   hintStyle: hintStyle ?? null,
-                  errorStyle: errorStyle ?? null,
+                  errorStyle: errorStyle ?? defaultErrorStyle,
                   labelStyle: labelStyle,
                   errorMaxLines: errorMaxLines ?? 3,
                   border: border ?? null,

@@ -1,6 +1,6 @@
 # example
 
-Demonstrates how to use the international_phone_input plugin.  
+A new Flutter project.
 
 ## Getting Started
 

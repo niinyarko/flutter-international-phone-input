@@ -23,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String phoneNumber = '68699698';
-  String? phoneIsoCode = '';
+  String? phoneIsoCode = '+373';
   bool visible = false;
   String? confirmedNumber = '';
 
@@ -56,21 +56,18 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Spacer(flex: 1),
-            InternationalPhoneInput(
-              onPhoneNumberChange: onPhoneNumberChange,
-              initialPhoneNumber: phoneNumber,
-              initialSelection: phoneIsoCode,
-              enabledCountries: ['+373'],
-              labelText: "Phone Number",
-            ),
             SizedBox(height: 20),
             InternationalPhoneInput(
-              decoration: InputDecoration.collapsed(hintText: '(123) 123-1234'),
+              //decoration: InputDecoration.collapsed(hintText: '(123) 123-1234'),
               onPhoneNumberChange: onPhoneNumberChange,
               initialPhoneNumber: phoneNumber,
               initialSelection: phoneIsoCode,
-              enabledCountries: ['+373'],
+              enabledCountries: {
+                '+373': 'MD',
+                '+40': 'RO',
+                '+7': 'RU',
+                '+374':'AM',
+              },
               showCountryCodes: true,
               showCountryFlags: true,
             ),
@@ -81,14 +78,15 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.black,
             ),
             SizedBox(height: 50),
-            InternationalPhoneInputText(
+           /*  InternationalPhoneInputText(
               onValidPhoneNumber: onValidPhoneNumber,
-            ),
+            ), */
             Visibility(
               child: Text('$confirmedNumber'),
               visible: visible,
             ),
-            Spacer(flex: 2)
+            Spacer(flex: 2),
+            ElevatedButton(onPressed: () {}, child: Text('Submmit'))
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.

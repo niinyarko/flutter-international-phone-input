@@ -7,13 +7,13 @@ import 'package:flutter/services.dart';
 
 class PhoneService {
   static List<Country> getPotentialCountries(
-      String number, List<Country>? countries) {
+      String number, List<Country> countries) {
     List<Country> result = [];
     if (number.length > 0 && number.length < 5) {
       List<String> potentialCodes =
           generatePotentialDialCodes(number, 0, number.length);
       for (var code in potentialCodes) {
-        for (var country in countries!) {
+        for (var country in countries) {
           if (code == country.dialCode) {
             result.add(country);
           }
@@ -24,7 +24,7 @@ class PhoneService {
       String intlCode = number.substring(0, 4);
       List<String> potentialCodes = generatePotentialDialCodes(intlCode, 0, 4);
       for (var code in potentialCodes) {
-        for (var country in countries!) {
+        for (var country in countries) {
           if (code == country.dialCode) {
             result.add(country);
           }
