@@ -151,28 +151,16 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         .loadString('packages/international_phone_input/assets/countries.json');
     List<dynamic> jsonList = json.decode(list);
 
-
-    if(widget.removeDuplicateCountries.isNotEmpty) {
-      for(int i = 0; i < jsonList.length ;i++){
-        Map<String, String> elem = Map<String, String>.from(jsonList[i]);
-        jsonList.forEach((element) {
-          if (widget.removeDuplicateCountries.contains(
-              elem['alpha_2_code'])) {
-            jsonList.remove(element);
-          }
-        });
-      }
-    }
     List<Country> countries = List<Country>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
-      if (widget.enabledCountries.isEmpty) {
+      if (widget.enabledCountries.isEmpty && widget.removeDuplicateCountries.isEmpty) {
         return Country(
             name: elem['en_short_name'],
             code: elem['alpha_2_code'],
             dialCode: elem['dial_code'],
             flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png');
       } else if (widget.enabledCountries.contains(elem['alpha_2_code']) ||
-          widget.enabledCountries.contains(elem['dial_code'])) {
+          widget.enabledCountries.contains(elem['dial_code']) && !(widget.removeDuplicateCountries.contains(elem['alpha_2_code']))) {
         return Country(
             name: elem['en_short_name'],
             code: elem['alpha_2_code'],
@@ -182,6 +170,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         return null;
       }
     });
+
 
     countries.removeWhere((value) => value == null);
 
