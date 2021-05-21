@@ -153,12 +153,15 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
 
     if(widget.removeDuplicateCountries.isNotEmpty) {
-      jsonList.forEach((element) {
-        if (widget.removeDuplicateCountries.contains(
-            element['alpha_2_code'])) {
-          jsonList.remove(element);
-        }
-      });
+      for(int i = 0; i < jsonList.length ;i++){
+        Map<String, String> elem = Map<String, String>.from(jsonList[i]);
+        jsonList.forEach((element) {
+          if (widget.removeDuplicateCountries.contains(
+              elem['alpha_2_code'])) {
+            jsonList.remove(element);
+          }
+        });
+      }
     }
     List<Country> countries = List<Country>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
