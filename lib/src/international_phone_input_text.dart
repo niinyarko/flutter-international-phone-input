@@ -40,6 +40,7 @@ class _InternationalPhoneInputTextState
             context, 'packages/international_phone_input/assets/countries.json')
         .then((list) {
       setState(() {
+
         countries = list;
       });
     });

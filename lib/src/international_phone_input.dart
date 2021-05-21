@@ -27,6 +27,7 @@ class InternationalPhoneInput extends StatefulWidget {
   final bool showCountryFlags;
   final Widget dropdownIcon;
   final InputBorder border;
+  final List<String> removeDuplicateCountries;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -44,6 +45,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.showCountryCodes = true,
       this.showCountryFlags = true,
       this.dropdownIcon,
+      this.removeDuplicateCountries = const [],
       this.border});
 
   static Future<String> internationalizeNumber(String number, String iso) {
@@ -151,6 +153,11 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
 
     List<Country> countries = List<Country>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
+      if(widget.removeDuplicateCountries.isNotEmpty){
+        elem.forEach((key, value) {
+            print("key is : "+key+" , value is :"+value);
+        });
+      }
       if (widget.enabledCountries.isEmpty) {
         return Country(
             name: elem['en_short_name'],
