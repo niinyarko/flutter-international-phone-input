@@ -156,7 +156,7 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       if(widget.removeDuplicateCountries.isNotEmpty){
         elem.forEach((key, value) {
           widget.removeDuplicateCountries.forEach((element) { 
-              elem.removeWhere((key, value) => key == element);
+              elem.removeWhere((key, value) => value == element);
           });
           //  print("key is : "+key+" , value is :"+value);
         });
