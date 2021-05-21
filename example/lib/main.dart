@@ -28,7 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String confirmedNumber = '';
 
   void onPhoneNumberChange(
-      String number, String internationalizedPhoneNumber, String isoCode) {
+      String number, String internationalizedPhoneNumber, String isoCode,String dialCode) {
     print(number);
     setState(() {
       phoneNumber = number;
@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
               initialPhoneNumber: phoneNumber,
               initialSelection: phoneIsoCode,
               enabledCountries: ['+233', '+1'],
+              removeDuplicateCountries: ["CA"],
               labelText: "Phone Number",
             ),
             SizedBox(height: 20),
@@ -68,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPhoneNumberChange: onPhoneNumberChange,
               initialPhoneNumber: phoneNumber,
               initialSelection: phoneIsoCode,
+              removeDuplicateCountries: ["CA"],
               enabledCountries: ['+233', '+1'],
               showCountryCodes: false,
               showCountryFlags: true,

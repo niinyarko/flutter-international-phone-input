@@ -155,7 +155,10 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
       if(widget.removeDuplicateCountries.isNotEmpty){
         elem.forEach((key, value) {
-            print("key is : "+key+" , value is :"+value);
+          widget.removeDuplicateCountries.forEach((element) { 
+              elem.removeWhere((key, value) => key == element);
+          });
+          //  print("key is : "+key+" , value is :"+value);
         });
       }
       if (widget.enabledCountries.isEmpty) {
