@@ -72,7 +72,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: b4cecbd8025443aa0c1613dcc3b305543fb83b9e
+      resolved-ref: f1a9ad34e07678a39e9a9da6f010995b741d1840
       url: "git://github.com/tearjerky/flutter-international-phone-input"
     source: git
     version: "1.0.4"

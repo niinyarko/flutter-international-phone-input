@@ -151,16 +151,17 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
         .loadString('packages/international_phone_input/assets/countries.json');
     List<dynamic> jsonList = json.decode(list);
 
+
+    if(widget.removeDuplicateCountries.isNotEmpty) {
+      jsonList.forEach((element) {
+        if (widget.removeDuplicateCountries.contains(
+            element['alpha_2_code'])) {
+          jsonList.remove(element);
+        }
+      });
+    }
     List<Country> countries = List<Country>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
-      if(widget.removeDuplicateCountries.isNotEmpty){
-        elem.forEach((key, value) {
-          widget.removeDuplicateCountries.forEach((element) { 
-              elem.removeWhere((key, value) => value == element);
-          });
-          //  print("key is : "+key+" , value is :"+value);
-        });
-      }
       if (widget.enabledCountries.isEmpty) {
         return Country(
             name: elem['en_short_name'],
