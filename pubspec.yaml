@@ -4,17 +4,14 @@ version: 1.0.4
 homepage: https://github.com/niinyarko/flutter-international-phone-input
 
 environment:
-    sdk: ">=2.2.2 <3.0.0"
+    sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
     flutter:
         sdk: flutter
-    libphonenumber: ^1.0.0
+    libphonenumber: ^2.0.1
 
 dev_dependencies:
-    test: ^1.6.0
-    flutter_test:
-        sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
