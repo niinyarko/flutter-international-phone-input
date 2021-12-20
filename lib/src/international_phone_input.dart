@@ -10,23 +10,23 @@ import 'package:international_phone_input/src/phone_service.dart';
 import 'country.dart';
 
 class InternationalPhoneInput extends StatefulWidget {
-  final void Function(String phoneNumber, String internationalizedPhoneNumber,
-      String isoCode, String dialCode) onPhoneNumberChange;
-  final String initialPhoneNumber;
-  final String initialSelection;
-  final String errorText;
-  final String hintText;
-  final String labelText;
-  final TextStyle errorStyle;
-  final TextStyle hintStyle;
-  final TextStyle labelStyle;
-  final int errorMaxLines;
+  final void Function(String phoneNumber, String? internationalizedPhoneNumber,
+      String? isoCode, String? dialCode)? onPhoneNumberChange;
+  final String? initialPhoneNumber;
+  final String? initialSelection;
+  final String? errorText;
+  final String? hintText;
+  final String? labelText;
+  final TextStyle? errorStyle;
+  final TextStyle? hintStyle;
+  final TextStyle? labelStyle;
+  final int? errorMaxLines;
   final List<String> enabledCountries;
-  final InputDecoration decoration;
+  final InputDecoration? decoration;
   final bool showCountryCodes;
   final bool showCountryFlags;
-  final Widget dropdownIcon;
-  final InputBorder border;
+  final Widget? dropdownIcon;
+  final InputBorder? border;
 
   InternationalPhoneInput(
       {this.onPhoneNumberChange,
@@ -46,7 +46,7 @@ class InternationalPhoneInput extends StatefulWidget {
       this.dropdownIcon,
       this.border});
 
-  static Future<String> internationalizeNumber(String number, String iso) {
+  static Future<String?> internationalizeNumber(String number, String iso) {
     return PhoneService.getNormalizedPhoneNumber(number, iso);
   }
 
@@ -56,26 +56,26 @@ class InternationalPhoneInput extends StatefulWidget {
 }
 
 class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
-  Country selectedItem;
-  List<Country> itemList = [];
+  Country? selectedItem;
+  List<Country?> itemList = [];
 
-  String errorText;
-  String hintText;
-  String labelText;
+  String? errorText;
+  String? hintText;
+  String? labelText;
 
-  TextStyle errorStyle;
-  TextStyle hintStyle;
-  TextStyle labelStyle;
+  TextStyle? errorStyle;
+  TextStyle? hintStyle;
+  TextStyle? labelStyle;
 
-  int errorMaxLines;
+  int? errorMaxLines;
 
   bool hasError = false;
-  bool showCountryCodes;
-  bool showCountryFlags;
+  late bool showCountryCodes;
+  late bool showCountryFlags;
 
-  InputDecoration decoration;
-  Widget dropdownIcon;
-  InputBorder border;
+  InputDecoration? decoration;
+  Widget? dropdownIcon;
+  InputBorder? border;
 
   _InternationalPhoneInputState();
 
@@ -96,16 +96,16 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
     dropdownIcon = widget.dropdownIcon;
 
     phoneTextController.addListener(_validatePhoneNumber);
-    phoneTextController.text = widget.initialPhoneNumber;
+    phoneTextController.text = widget.initialPhoneNumber!;
 
     _fetchCountryData().then((list) {
-      Country preSelectedItem;
+      Country? preSelectedItem;
 
       if (widget.initialSelection != null) {
         preSelectedItem = list.firstWhere(
             (e) =>
-                (e.code.toUpperCase() ==
-                    widget.initialSelection.toUpperCase()) ||
+                (e!.code!.toUpperCase() ==
+                    widget.initialSelection!.toUpperCase()) ||
                 (e.dialCode == widget.initialSelection.toString()),
             orElse: () => list[0]);
       } else {
@@ -124,46 +124,46 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
   _validatePhoneNumber() {
     String phoneText = phoneTextController.text;
     if (phoneText != null && phoneText.isNotEmpty) {
-      PhoneService.parsePhoneNumber(phoneText, selectedItem.code)
+      PhoneService.parsePhoneNumber(phoneText, selectedItem!.code!)
           .then((isValid) {
         setState(() {
-          hasError = !isValid;
+          hasError = !isValid!;
         });
 
         if (widget.onPhoneNumberChange != null) {
-          if (isValid) {
-            PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem.code)
+          if (isValid!) {
+            PhoneService.getNormalizedPhoneNumber(phoneText, selectedItem!.code!)
                 .then((number) {
-              widget.onPhoneNumberChange(phoneText, number, selectedItem.code, selectedItem.dialCode);
+              widget.onPhoneNumberChange!(phoneText, number, selectedItem!.code, selectedItem!.dialCode);
             });
           } else {
-            widget.onPhoneNumberChange('', '', selectedItem.code, selectedItem.dialCode);
+            widget.onPhoneNumberChange!('', '', selectedItem!.code, selectedItem!.dialCode);
           }
         }
       });
     }
   }
 
-  Future<List<Country>> _fetchCountryData() async {
+  Future<List<Country?>> _fetchCountryData() async {
     var list = await DefaultAssetBundle.of(context)
         .loadString('packages/international_phone_input/assets/countries.json');
     List<dynamic> jsonList = json.decode(list);
 
-    List<Country> countries = List<Country>.generate(jsonList.length, (index) {
+    List<Country?> countries = List<Country?>.generate(jsonList.length, (index) {
       Map<String, String> elem = Map<String, String>.from(jsonList[index]);
       if (widget.enabledCountries.isEmpty) {
         return Country(
             name: elem['en_short_name'],
             code: elem['alpha_2_code'],
             dialCode: elem['dial_code'],
-            flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png');
+            flagUri: 'assets/flags/${elem['alpha_2_code']!.toLowerCase()}.png');
       } else if (widget.enabledCountries.contains(elem['alpha_2_code']) ||
           widget.enabledCountries.contains(elem['dial_code'])) {
         return Country(
             name: elem['en_short_name'],
             code: elem['alpha_2_code'],
             dialCode: elem['dial_code'],
-            flagUri: 'assets/flags/${elem['alpha_2_code'].toLowerCase()}.png');
+            flagUri: 'assets/flags/${elem['alpha_2_code']!.toLowerCase()}.png');
       } else {
         return null;
       }
@@ -190,13 +190,13 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                       EdgeInsets.only(bottom: (decoration != null) ? 6 : 0),
                   child: dropdownIcon ?? Icon(Icons.arrow_drop_down),
                 ),
-                onChanged: (Country newValue) {
+                onChanged: (Country? newValue) {
                   setState(() {
                     selectedItem = newValue;
                   });
                   _validatePhoneNumber();
                 },
-                items: itemList.map<DropdownMenuItem<Country>>((Country value) {
+                items: itemList.map<DropdownMenuItem<Country>>((Country? value) {
                   return DropdownMenuItem<Country>(
                     value: value,
                     child: Container(
@@ -206,14 +206,14 @@ class _InternationalPhoneInputState extends State<InternationalPhoneInput> {
                         children: <Widget>[
                           if (showCountryFlags) ...[
                             Image.asset(
-                              value.flagUri,
+                              value!.flagUri!,
                               width: 32.0,
                               package: 'international_phone_input',
                             )
                           ],
                           if (showCountryCodes) ...[
                             SizedBox(width: 4),
-                            Text(value.dialCode)
+                            Text(value!.dialCode!)
                           ]
                         ],
                       ),

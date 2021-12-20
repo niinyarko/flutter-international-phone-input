@@ -4,15 +4,15 @@ import 'package:international_phone_input/src/phone_service.dart';
 
 class InternationalPhoneInputText extends StatefulWidget {
   final Function(
-          String number, String internationalizedPhoneNumber, String isoCode)
+          String number, String? internationalizedPhoneNumber, String? isoCode)?
       onValidPhoneNumber;
-  final String hintText;
-  final TextStyle hintStyle;
-  final int errorMaxLines;
-  final String labelText;
+  final String? hintText;
+  final TextStyle? hintStyle;
+  final int? errorMaxLines;
+  final String? labelText;
 
   const InternationalPhoneInputText(
-      {Key key,
+      {Key? key,
       this.hintText,
       this.hintStyle,
       this.errorMaxLines,
@@ -28,8 +28,8 @@ class InternationalPhoneInputText extends StatefulWidget {
 class _InternationalPhoneInputTextState
     extends State<InternationalPhoneInputText> {
   TextEditingController controller = TextEditingController();
-  List<Country> countries;
-  bool isValid = false;
+  List<Country>? countries;
+  bool? isValid = false;
   String controlNumber = '';
   bool performValidation = true;
 
@@ -48,7 +48,7 @@ class _InternationalPhoneInputTextState
   void onChanged() {
     // if user keeps inputting number, block the value to the last valid
     // number input
-    if (isValid && controller.text.length > controlNumber.length) {
+    if (isValid! && controller.text.length > controlNumber.length) {
       setState(() {
         controller.text = controlNumber;
       });
@@ -80,9 +80,9 @@ class _InternationalPhoneInputTextState
     return;
   }
 
-  Future<String> _validatePhoneNumber(
-      String number, List<Country> countries) async {
-    String fullNumber;
+  Future<String?> _validatePhoneNumber(
+      String number, List<Country>? countries) async {
+    String? fullNumber;
     if (number != null && number.isNotEmpty) {
       //This step to avoid calling async function on the whole list of countries
       List<Country> potentialCountries =
@@ -90,13 +90,13 @@ class _InternationalPhoneInputTextState
       if (potentialCountries != null) {
         for (var country in potentialCountries) {
           //isolate local number before parsing. Using length-1 to cut the '+'
-          String localNumber = number.substring(country.dialCode.length - 1);
+          String localNumber = number.substring(country.dialCode!.length - 1);
           isValid =
-              await PhoneService.parsePhoneNumber(localNumber, country.code);
-          if (isValid) {
+              await PhoneService.parsePhoneNumber(localNumber, country.code!);
+          if (isValid!) {
             fullNumber = await PhoneService.getNormalizedPhoneNumber(
-                localNumber, country.code);
-            widget.onValidPhoneNumber(localNumber, fullNumber, country.code);
+                localNumber, country.code!);
+            widget.onValidPhoneNumber!(localNumber, fullNumber, country.code);
           }
         }
       }
